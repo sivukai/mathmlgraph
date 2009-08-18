@@ -1,4 +1,4 @@
-﻿package learnmath.graph.config{
+package learnmath.graph.config{
 /*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
@@ -7,7 +7,7 @@
 
 public class FlashVarsConfig{
 
-	public static function init(configAppInfo:ConfigAppInfo):void{
+	public function init(configAppInfo:ConfigAppInfo):void{
 		
 	}
 

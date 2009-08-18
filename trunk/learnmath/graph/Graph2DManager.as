@@ -15,44 +15,49 @@ import fl.controls.*;
 
 public class Graph2DManager{
 
-	public static var configAppInfo:ConfigAppInfo;
-	public static var coordinateScreen:SystemCoordinate;
-	public static var bigScreen:Screen;
-	public static var littleScreen:Screen;
-	public static var textScreen:TextArea;
-	public static var oldText:String;
+	public var graphWorkspace:GraphWorkspace;
+	public var configAppInfo:ConfigAppInfo;
+	public var coordinateScreen:SystemCoordinate;
+	public var bigScreen:Screen;
+	public var littleScreen:Screen;
+	public var textScreen:TextArea;
+	public var oldText:String;
 	
-	public static var functionManager:FunctionManager;
+	public var functionManager:FunctionManager;
 	
-	public static var selection:SelectionDomain;
+	public var selection:SelectionDomain;
+	public var drawLittleScreen:Boolean = false;
 	
-
-	public static function init():void{
-		configAppInfo = ConfigurationManager.getConfig();
-		functionManager = FunctionManager.init();
-		selection = new SelectionDomain(ConfigurationManager.getStyleForSelection());
+	public function Graph2DManager(_graphWorkspace:GraphWorkspace){
+		graphWorkspace = _graphWorkspace;
 	}
 
-	public static function initBigScreen(maxWidth:int, maxHeight:int, pannel:Sprite):void{
+	public function init():void{
+		configAppInfo = ConfigurationManager.getConfig();
+		functionManager = new FunctionManager();
+		selection = new SelectionDomain(this, configAppInfo.getStyleForSelection());
+	}
+
+	public function initBigScreen(maxWidth:int, maxHeight:int, pannel:Sprite):void{
 		var w = configAppInfo.configBigScreen.width;
 		var h = configAppInfo.configBigScreen.height;
 		if(w>0){
-			bigScreen = new BigScreen(w, h, pannel);
+			bigScreen = new BigScreen(this, w, h, pannel);
 		}else{
-			bigScreen = new BigScreen(maxWidth, maxHeight, pannel);
+			bigScreen = new BigScreen(this, maxWidth, maxHeight, pannel);
 		}
 	}
 
-	public static function initTextScreen(_textScreen:TextArea):void{
+	public function initTextScreen(_textScreen:TextArea):void{
 		textScreen = _textScreen;
 	}
 
-	public static function initLittleScreen(width:int, height:int, pannel:Sprite):void{
-		littleScreen = new LittleScreen(width, height, pannel);
+	public function initLittleScreen(width:int, height:int, pannel:Sprite):void{
+		littleScreen = new LittleScreen(this, width, height, pannel);
 	}
 
 
-	public static function drawInit():void{
+	public function drawInit():void{
 		functionManager.calculatePoints(configAppInfo);
 		coordinateScreen = configAppInfo.getCoordinateSystem();
 
@@ -64,31 +69,52 @@ public class Graph2DManager{
 		functionManager.drawOnScreen(littleScreen);
 		functionManager.drawOnScreen(bigScreen);
 	}
+	
+	public function drawInitB():void{
+		functionManager.calculatePoints(configAppInfo);
+		coordinateScreen = configAppInfo.getCoordinateSystem();
+		bigScreen.init();
+		coordinateScreen.drawOnScreen(bigScreen, configAppInfo.getStyleForCoordinates());
+		functionManager.drawOnScreen(bigScreen);
+	}
 
-	public static function drawOnFrame():void{
+	public function drawInitL():void{
+		littleScreen.init();
+		coordinateScreen.drawOnScreen(littleScreen, configAppInfo.getStyleForCoordinates());
+		functionManager.drawOnScreen(littleScreen);
+	}
+
+
+	public function drawOnFrame():void{
 		if(coordinateScreen.moveTheZoom()){
-			drawInit();
+			drawInitB();
+			drawLittleScreen = true;
+		}else{
+			if(drawLittleScreen){
+				drawInitL();
+				drawLittleScreen = false;
+			}
 		}
 		littleScreen.draw();
 		bigScreen.draw();
 	}
 	
-	public static function getScreenCenterCoordinate():Point{
+	public function getScreenCenterCoordinate():Point{
 		coordinateScreen = configAppInfo.getCoordinateSystem();
 		return coordinateScreen.getScreenCenterCoordinate(bigScreen);
 	}
 
-	public static function getAbsoluteCoordinate(screen:Screen, screenPoint:Point):Point{
+	public function getAbsoluteCoordinate(screen:Screen, screenPoint:Point):Point{
 		coordinateScreen = configAppInfo.getCoordinateSystem();
 		return coordinateScreen.getAbsoluteCoordinate(screen, screenPoint);
 	}
 
 
-	public static function drawSelection(sprite:Sprite, beginPoint:Point, endPoint:Point ):void{
+	public function drawSelection(sprite:Sprite, beginPoint:Point, endPoint:Point ):void{
 		selection.drawSelection(sprite, beginPoint, endPoint);
 	}
 
-	public static function writePosition(point:Point ):void{
+	public function writePosition(point:Point ):void{
 		coordinateScreen = configAppInfo.getCoordinateSystem();
 		var p:Point = coordinateScreen.getAbsoluteCoordinate(bigScreen, point);
 		var t:String = oldText;
@@ -97,13 +123,13 @@ public class Graph2DManager{
 		textScreen.htmlText = t;
 	}
 
-	public static function zoomOutTheDomain():void{
+	public function zoomOutTheDomain():void{
 		coordinateScreen = configAppInfo.getCoordinateSystem();
 		coordinateScreen.zoomOutTheDomain();
 		drawInit();
 	}
 
-	public static function zoomInTheDomain():void{
+	public function zoomInTheDomain():void{
 		coordinateScreen = configAppInfo.getCoordinateSystem();
 		coordinateScreen.zoomInTheDomain(selection.absBeginPoint, selection.absEndPoint);
 		drawInit();
@@ -112,20 +138,20 @@ public class Graph2DManager{
 		selection.absEndPoint = null
 	}
 
-	public static function resetZoom():void{
+	public function resetZoom():void{
 		coordinateScreen = configAppInfo.getCoordinateSystem();
 		coordinateScreen.resetZoom();
 		drawInit();
 	}
 
-	public static function moveDomainTo(p:Point):void{
+	public function moveDomainTo(p:Point):void{
 		coordinateScreen = configAppInfo.getCoordinateSystem();
 		var point:Point = coordinateScreen.getAbsoluteCoordinate(bigScreen, p);
 		coordinateScreen.moveDomainTo(point);
 		drawInit();
 	}
 	
-	public static function moveDomain(key:uint):void{
+	public function moveDomain(key:uint):void{
 		coordinateScreen = configAppInfo.getCoordinateSystem();
 		if(key==37){
 			coordinateScreen.moveDomainLeft();
@@ -141,24 +167,26 @@ public class Graph2DManager{
 		}
 	}
 
-	public static function displayText(htmlText:String):void{
+	public function displayText(htmlText:String):void{
 		textScreen.htmlText = htmlText;
 		oldText = htmlText;
 	}
 
-	public static function clearText():void{
+	public function clearText():void{
 		textScreen.htmlText = "";
 		oldText = "";
 	}
 
-	public static function addText(htmlText:String):void{
+	public function addText(htmlText:String):void{
 		textScreen.htmlText = textScreen.htmlText + htmlText;
 		oldText = textScreen.htmlText;
 	}
 
-	public static function addFunction(mathML:String):String{
+	public function addFunction(mathML:String):String{
 		return functionManager.addFunction(mathML);
 	}
+
+
 
 }
 }

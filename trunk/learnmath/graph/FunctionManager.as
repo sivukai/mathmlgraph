@@ -1,4 +1,4 @@
-﻿package learnmath.graph{
+package learnmath.graph{
 /*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
@@ -16,11 +16,6 @@ public class FunctionManager{
 
 	public var functions:Array;
 	public var configDefaultFunction:ConfigFunctionInfo;
-
-	public static function init():FunctionManager{
-		var f:FunctionManager = new FunctionManager();
-		return f;
-	}
 
 	public function FunctionManager(){
 		functions = new Array();

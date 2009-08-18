@@ -14,6 +14,7 @@ import flash.events.*;
 
 public class Screen{
 
+	public var graphManager:Graph2DManager
 	private var shapes:Array;
 	
 	public var width:int;
@@ -22,7 +23,8 @@ public class Screen{
 	public var systemCoordinate;
 	public var needRedraw:Boolean = true;
 	
-	public function Screen(_width:int, _height:int, _pannel:Sprite){
+	public function Screen(_graphManager:Graph2DManager, _width:int, _height:int, _pannel:Sprite){
+		graphManager = _graphManager;
 		width = _width;
 		height = _height;
 		pannel = _pannel;
@@ -44,11 +46,7 @@ public class Screen{
 	}
 
 	public function draw():void{
-		if(!needRedraw){
-			for( var j =0; j<pannel.numChildren; j++){
-	  			//pannel.getChildAt(0).draw();
-			}		
-		}else{
+		if(needRedraw){
 			for(var i:int =0; i<shapes.length; i++){
 				var container:Sprite = new Sprite();
 				container.buttonMode = true;
@@ -80,8 +78,9 @@ public class Screen{
 		if(!(evt.target.name.indexOf("Shape")==0)) return;
 		if(evt.target.numChildren==0) return;
 
-		var center:Point = Graph2DManager.getScreenCenterCoordinate();
+		var center:Point = graphManager.getScreenCenterCoordinate();
 		var p:Point = new Point(evt.stageX, evt.stageY);
+		p = graphManager.graphWorkspace.containerSelection.globalToLocal(p);
 		
 		var mouseCoordinates = evt.target.getChildAt(0)
 		mouseCoordinates.graphics.clear();
@@ -95,7 +94,7 @@ public class Screen{
 		while (mouseCoordinates.numChildren){
 	  		mouseCoordinates.removeChildAt(0);
 		}		
-		var rp:Point = Graph2DManager.getAbsoluteCoordinate(this, p);
+		var rp:Point = graphManager.getAbsoluteCoordinate(this, p);
 		DrawUtil.drawText(mouseCoordinates, 0x998888, p.x + 5 , p.y -5, "(" + GeomUtil.roundNumber(rp.x) + ", " + GeomUtil.roundNumber(rp.y) + ")", 'left', 10);
 	}
 
