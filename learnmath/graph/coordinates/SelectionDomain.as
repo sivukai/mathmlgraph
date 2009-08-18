@@ -13,11 +13,13 @@ import flash.display.*;
 
 public class SelectionDomain{
 
+	var graphManager:Graph2DManager
 	public var style:StrokeStyle;
 	public var absBeginPoint:Point;
 	public var absEndPoint:Point;
 	
-	public function SelectionDomain(_style:StrokeStyle){
+	public function SelectionDomain(_graphManager:Graph2DManager, _style:StrokeStyle){
+		graphManager = _graphManager;
 		style = _style;
 	}
 	
@@ -27,10 +29,10 @@ public class SelectionDomain{
 		if(Math.abs(beginPoint.y-endPoint.y)<20) return;
 		
 		sprite.graphics.lineStyle(1,0xbbbbbb);
-		var center:Point = Graph2DManager.getScreenCenterCoordinate();
+		var center:Point = graphManager.getScreenCenterCoordinate();
 		
-		absBeginPoint = Graph2DManager.getAbsoluteCoordinate(Graph2DManager.bigScreen, beginPoint);
-		absEndPoint = Graph2DManager.getAbsoluteCoordinate(Graph2DManager.bigScreen, endPoint);
+		absBeginPoint = graphManager.getAbsoluteCoordinate(graphManager.bigScreen, beginPoint);
+		absEndPoint = graphManager.getAbsoluteCoordinate(graphManager.bigScreen, endPoint);
 
 
 		DrawUtil.dashLine(sprite, beginPoint.x, beginPoint.y, center.x, beginPoint.y);

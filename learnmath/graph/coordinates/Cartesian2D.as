@@ -12,8 +12,6 @@ import flash.geom.*;
 
 public class Cartesian2D extends SystemCoordinate{
 
-
-	
 	public function Cartesian2D(){
 		super();
 		minX = -400;
@@ -138,7 +136,7 @@ public class Cartesian2D extends SystemCoordinate{
 		t = t + "&nbsp;&nbsp;&nbsp;<b>Y</b> = ["+GeomUtil.roundNumber(scaleY)+"]";
 		t = t + "<br><b>Center: X</b> = ["+GeomUtil.roundNumber(absCenterScreenPoint.x)+"]";
 		t = t + "&nbsp;&nbsp;&nbsp;<b>Y</b> = ["+GeomUtil.roundNumber(absCenterScreenPoint.y)+"]";
-		Graph2DManager.displayText(t);
+		screen.graphManager.displayText(t);
 	}
 
 	private function drawGrid(screen:Screen, style:StrokeStyle):void{

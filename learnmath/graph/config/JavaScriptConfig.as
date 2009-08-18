@@ -1,4 +1,4 @@
-﻿package learnmath.graph.config{
+package learnmath.graph.config{
 /*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
@@ -7,9 +7,9 @@
 
 public class JavaScriptConfig{
 
-	private static var configAppInfo:ConfigAppInfo;
+	private var configAppInfo:ConfigAppInfo;
 	
-	public static function init(_configAppInfo:ConfigAppInfo):void{
+	public function init(_configAppInfo:ConfigAppInfo):void{
 		configAppInfo = _configAppInfo;
 	}
 

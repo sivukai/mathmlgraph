@@ -36,7 +36,7 @@ public class SystemCoordinate{
 	var zoomMoves:Array = new Array();
 	
 	public var zoomTimerConst:Number = 1;
-	public var zoomAnimationConst:Number = 30;
+	public var zoomAnimationConst:Number = 20;
 	public var zoomTimer:Number = zoomTimerConst;
 	
 	public function drawOnScreen(screen:Screen, style:StrokeStyle):void{
