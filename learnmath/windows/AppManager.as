@@ -31,7 +31,12 @@ public class AppManager{
 		if(mainPannel==null) return;
 		mainPannel.drawOnFrame();
 	}
-	
+
+	public static function zoomOutTheDomain():void{
+		if(mainPannel==null) return;
+		mainPannel.zoomOutTheDomain();
+	}
+
 	public static function processKey(e:KeyboardEvent) {
 		if(mainPannel==null) return;
 		mainPannel.processKey(e)

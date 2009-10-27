@@ -39,13 +39,7 @@ public class Graph2DManager{
 	}
 
 	public function initBigScreen(maxWidth:int, maxHeight:int, pannel:Sprite):void{
-		var w = configAppInfo.configBigScreen.width;
-		var h = configAppInfo.configBigScreen.height;
-		if(w>0){
-			bigScreen = new BigScreen(this, w, h, pannel);
-		}else{
-			bigScreen = new BigScreen(this, maxWidth, maxHeight, pannel);
-		}
+		bigScreen = new BigScreen(this, maxWidth, maxHeight, pannel);
 	}
 
 	public function initTextScreen(_textScreen:TextArea):void{
@@ -60,28 +54,25 @@ public class Graph2DManager{
 	public function drawInit():void{
 		functionManager.calculatePoints(configAppInfo);
 		coordinateScreen = configAppInfo.getCoordinateSystem();
+		coordinateScreen.setScreens(bigScreen, littleScreen);
 
 		littleScreen.init();
 		bigScreen.init();
 
-		coordinateScreen.drawOnScreen(littleScreen, configAppInfo.getStyleForCoordinates());
-		coordinateScreen.drawOnScreen(bigScreen, configAppInfo.getStyleForCoordinates());
-		functionManager.drawOnScreen(littleScreen);
-		functionManager.drawOnScreen(bigScreen);
+		coordinateScreen.drawOnScreen(littleScreen, functionManager, configAppInfo.getStyleForCoordinates());
+		coordinateScreen.drawOnScreen(bigScreen, functionManager, configAppInfo.getStyleForCoordinates());
 	}
 	
 	public function drawInitB():void{
 		functionManager.calculatePoints(configAppInfo);
 		coordinateScreen = configAppInfo.getCoordinateSystem();
 		bigScreen.init();
-		coordinateScreen.drawOnScreen(bigScreen, configAppInfo.getStyleForCoordinates());
-		functionManager.drawOnScreen(bigScreen);
+		coordinateScreen.drawOnScreen(bigScreen, functionManager, configAppInfo.getStyleForCoordinates());
 	}
 
 	public function drawInitL():void{
 		littleScreen.init();
-		coordinateScreen.drawOnScreen(littleScreen, configAppInfo.getStyleForCoordinates());
-		functionManager.drawOnScreen(littleScreen);
+		coordinateScreen.drawOnScreen(littleScreen, functionManager, configAppInfo.getStyleForCoordinates());
 	}
 
 
@@ -116,11 +107,7 @@ public class Graph2DManager{
 
 	public function writePosition(point:Point ):void{
 		coordinateScreen = configAppInfo.getCoordinateSystem();
-		var p:Point = coordinateScreen.getAbsoluteCoordinate(bigScreen, point);
-		var t:String = oldText;
-		t = t +"<br><b>Position: X</b> = ["+GeomUtil.roundNumber(p.x)+"]";
-		t = t + "&nbsp;&nbsp;&nbsp;<b>Y</b> = ["+GeomUtil.roundNumber(p.y)+"]";
-		textScreen.htmlText = t;
+		coordinateScreen.writePosition(oldText, point, textScreen, bigScreen);
 	}
 
 	public function zoomOutTheDomain():void{
@@ -131,19 +118,30 @@ public class Graph2DManager{
 
 	public function zoomInTheDomain():void{
 		coordinateScreen = configAppInfo.getCoordinateSystem();
-		coordinateScreen.zoomInTheDomain(selection.absBeginPoint, selection.absEndPoint);
+		coordinateScreen.zoomInTheDomain();
+		drawInit();
+	}
+
+	public function zoomInSelection():void{
+		coordinateScreen = configAppInfo.getCoordinateSystem();
+		coordinateScreen.zoomInSelection(bigScreen, selection.absBeginPoint, selection.absEndPoint);
 		drawInit();
 		
 		selection.absBeginPoint = null;
 		selection.absEndPoint = null
 	}
 
-	public function resetZoom():void{
+	public function moveToOrigin():void{
 		coordinateScreen = configAppInfo.getCoordinateSystem();
-		coordinateScreen.resetZoom();
+		coordinateScreen.moveToOrigin();
 		drawInit();
 	}
-
+	
+	public function setCoordinate(newCoordinate:SystemCoordinate):void{
+		configAppInfo.coordinate = newCoordinate;
+		drawInit();
+	}
+	
 	public function moveDomainTo(p:Point):void{
 		coordinateScreen = configAppInfo.getCoordinateSystem();
 		var point:Point = coordinateScreen.getAbsoluteCoordinate(bigScreen, p);

@@ -56,12 +56,18 @@ public class ParserManager{
 				if(OperatorManager.isOperator(n)){
 					var o:Operator = OperatorManager.getOperator(n);
 					elements[elements.length] = o;
+				}else if(OperatorManager.isFunction(n) && node.childNodes.length>(i+1)){
+					var child:GraphFunction = loadNode(node.childNodes[i+1], variables);
+					var f:GraphFunction = OperatorManager.getFunction(n, child);
+					elements[elements.length] = f;
+					i++;
 				}else{
 					var child:GraphFunction = loadNode(node.childNodes[i], variables);
 					elements[elements.length] = child
 				}
 			}
 		}
+		trace(elements);
 		
 		// verification don't have 2 operators succesive
 		var find:Boolean = false;
@@ -132,7 +138,7 @@ public class ParserManager{
 		if(lastFunction!=null){
 			elements2[elements2.length] = lastFunction;
 		}
-		//trace(elements2);
+		trace(elements2);
 		
 		// transform elements in functions
 		var children = new Array();

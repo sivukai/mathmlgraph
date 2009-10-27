@@ -8,6 +8,7 @@ import learnmath.mathml.graph.*;
 import learnmath.mathml.graph.strokes.*;
 import learnmath.mathml.graph.coordinates.*;
 import learnmath.mathml.graph.util.*;
+import learnmath.mathml.formula.*;
 import flash.display.*;
 import flash.geom.*;
 import flash.events.*;
@@ -20,7 +21,6 @@ public class Screen{
 	public var width:int;
 	public var height:int;
 	public var pannel:Sprite;
-	public var systemCoordinate;
 	public var needRedraw:Boolean = true;
 	
 	public function Screen(_graphManager:Graph2DManager, _width:int, _height:int, _pannel:Sprite){
@@ -53,50 +53,33 @@ public class Screen{
 				container.name="Shape" + i;
 				
 				if(shapes[i] is FunctionShape2D && this is BigScreen){
-					var mouseCoordinates:Sprite = mouseCoordinates = new Sprite();
+					var mouseCoordinates:Sprite = new Sprite();
+					mouseCoordinates.mouseEnabled = false;
 					container.addChild(mouseCoordinates);
+					
+					var infoCoordinates:Sprite = new Sprite();
+					infoCoordinates.mouseEnabled = false;
+					infoCoordinates.mouseChildren = false;
+					infoCoordinates.visible = false;
+					
+					container.addChild(shapes[i].mathML);
 				}
 				
 				pannel.addChild(container);
 				shapes[i].draw(container);
-				container.addEventListener(MouseEvent.CLICK, mouseClick);
+				if(shapes[i].coordinateSystem!=null){
+					shapes[i].coordinateSystem.addClickListenersToShape(container);
+				}
 				
 				if(shapes[i] is FunctionShape2D && this is BigScreen){
-					container.addEventListener(MouseEvent.MOUSE_OVER, mouseOverCall);
-					//container.addEventListener(MouseEvent.MOUSE_OUT, mouseOutCall);
+					shapes[i].coordinateSystem.addOverListenersToShape(container);
 				}
 			}
 			needRedraw = false;
 		}
 	}
 	
-	public function mouseClick(event:MouseEvent):void {
-		trace("click on " + event.target.name);
-	}
-
-	public function mouseOverCall(evt:MouseEvent):void {
-		if(!(evt.target.name.indexOf("Shape")==0)) return;
-		if(evt.target.numChildren==0) return;
-
-		var center:Point = graphManager.getScreenCenterCoordinate();
-		var p:Point = new Point(evt.stageX, evt.stageY);
-		p = graphManager.graphWorkspace.containerSelection.globalToLocal(p);
-		
-		var mouseCoordinates = evt.target.getChildAt(0)
-		mouseCoordinates.graphics.clear();
-		
-		mouseCoordinates.graphics.lineStyle(1,0x998888, 0.4);
-		mouseCoordinates.graphics.moveTo(p.x, p.y);
-		mouseCoordinates.graphics.lineTo(center.x, p.y);
-		mouseCoordinates.graphics.moveTo(p.x, p.y);
-		mouseCoordinates.graphics.lineTo(p.x, center.y);
-		
-		while (mouseCoordinates.numChildren){
-	  		mouseCoordinates.removeChildAt(0);
-		}		
-		var rp:Point = graphManager.getAbsoluteCoordinate(this, p);
-		DrawUtil.drawText(mouseCoordinates, 0x998888, p.x + 5 , p.y -5, "(" + GeomUtil.roundNumber(rp.x) + ", " + GeomUtil.roundNumber(rp.y) + ")", 'left', 10);
-	}
+	
 
 
 

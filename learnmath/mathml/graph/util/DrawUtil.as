@@ -1,4 +1,4 @@
-package learnmath.mathml.graph.util{
+﻿package learnmath.mathml.graph.util{
 /*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
@@ -71,6 +71,18 @@ public class DrawUtil{
                  g.addChild(tfd); 
                  return tfd; 
         }; 
+		
+	public static function getWidth(text:String, siz:Number=12, fnt:String='Arial'):Number{
+		var tfield:TextField = new TextField();
+		var fmt:TextFormat = new TextFormat(); 
+		fmt.font = fnt; 
+        fmt.size = siz; 
+        fmt.underline = false; 
+		tfield.defaultTextFormat = fmt;
+		tfield.text = text;
+		return tfield.getLineMetrics(0).width;
+	}
+	
 
 }
 }

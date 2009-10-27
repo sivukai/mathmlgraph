@@ -5,11 +5,11 @@
 	Site: www.learn-math.info
 ---------------------------------------------------------------*/
 
-public class Sin extends GraphFunction{
+public class Cos extends GraphFunction{
 
 	private var n1:GraphFunction;
 	
-	public function Sin(_n1:GraphFunction):void{
+	public function Cos(_n1:GraphFunction):void{
 		n1 = _n1;
 		getVariablesFrom(_n1);
 	}
@@ -25,13 +25,13 @@ public class Sin extends GraphFunction{
 		
 		var v1 = n1.calculate(value).calcValue;
 
-		value.calcValue = Math.sin(v1);
+		value.calcValue = Math.cos(v1);
 		return value;
 	}
 	
 
 	public override function toString():String{
-		return "sin(" + n1.toString()+")";
+		return "cos(" + n1.toString()+")";
 	}
 
 

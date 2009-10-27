@@ -9,6 +9,7 @@ import flash.display.*;
 import flash.geom.*;
 import fl.controls.*;
 import flash.events.*;
+import learnmath.mathml.graph.coordinates.*;
 
 
 public class GraphWorkspace{
@@ -45,25 +46,16 @@ public class GraphWorkspace{
 		var container2:Sprite = new Sprite();
 		littleMovieClip.littlePannel.addChild(container2);
 		
-		if(width<800){
-			var factor = height/800;
-			if(width<height){
-				factor = width/800;
-			}
-			littleMovieClip.width = 202*factor;
-			littleMovieClip.height = 202*factor;
-		}
-		littleMovieClip.x = 100*width/800;
-		littleMovieClip.y = 70*height/800;
+		littleMovieClip.x = 40;
+		littleMovieClip.y = 40;
+		littleMovieClip.scaleX = 0.7;
+		littleMovieClip.scaleY = 0.7;
 		parent.addChild(littleMovieClip);
 		
-		//300/121
 		var textClip = new TextClip();
-		if(width>=800){
-			textClip.x = width - 200*width/800;
-			textClip.y = height - 100*height/800;;
-			parent.addChild(textClip);
-		}
+		textClip.x = width - 160;
+		textClip.y = height - 160;;
+		parent.addChild(textClip);
 
 
 		var container:Sprite = new Sprite();
@@ -107,7 +99,7 @@ public class GraphWorkspace{
 	
 	function stopSelect(evt:MouseEvent):void {
 		startSelecting = false;
-		graphManager.zoomInTheDomain();
+		graphManager.zoomInSelection();
 		clearSelection();
 	}
 	
@@ -118,7 +110,7 @@ public class GraphWorkspace{
 			}
 	}
 	
-	function keyReleased(event:KeyboardEvent):void {
+	public function keyReleased(event:KeyboardEvent):void {
 		graphManager.moveDomain(event.keyCode);
 	}
 	
@@ -131,11 +123,27 @@ public class GraphWorkspace{
 	public function drawOnFrame():void{
 		graphManager.drawOnFrame();
 	}
-	
+
+	public function moveToOrigin():void{
+		graphManager.moveToOrigin();
+	}
+
+	public function zoomInTheDomain():void{
+		graphManager.zoomInTheDomain();
+	}
+
+	public function zoomOutTheDomain():void{
+		graphManager.zoomOutTheDomain();
+	}
+
 	public function addFunction(mathML:String):String{
 		var val = graphManager.addFunction(mathML);
 		graphManager.drawInit();
 		return val;
+	}
+
+	public function setCoordinate(newCoordinate:SystemCoordinate):void{
+		graphManager.setCoordinate(newCoordinate);
 	}
 
 }
