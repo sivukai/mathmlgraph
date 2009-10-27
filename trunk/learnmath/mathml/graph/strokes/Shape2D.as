@@ -5,13 +5,16 @@
 	Site: www.learn-math.info
 ---------------------------------------------------------------*/
 import learnmath.mathml.graph.animations.*;
+import learnmath.mathml.graph.coordinates.*;
 import flash.display.*;
+import learnmath.mathml.graph.screens.*;
 
 public class Shape2D{
 
-
+	public var mathML:Sprite;
 	private var groupsOfStrokes:Array;
 	private var label:String = "";
+	public var coordinateSystem:SystemCoordinate
 	
 	public function Shape2D(){
 		groupsOfStrokes = new Array();

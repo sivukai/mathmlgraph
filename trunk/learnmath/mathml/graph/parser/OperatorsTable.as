@@ -47,5 +47,26 @@ public class OperatorsTable{
 		}
 		return false;
 	}
+
+	public static function isSin(node:XMLNode):Boolean{
+		if(node.nodeName=='mo'){
+			var op = node.childNodes[0].nodeValue.toLowerCase();
+			if(op=="sin"){
+				return true;
+			}			
+		}
+		return false;
+	}
+
+	public static function isCos(node:XMLNode):Boolean{
+		if(node.nodeName=='mo'){
+			var op = node.childNodes[0].nodeValue.toLowerCase();
+			if(op=="cos"){
+				return true;
+			}			
+		}
+		return false;
+	}
+
 }
 }

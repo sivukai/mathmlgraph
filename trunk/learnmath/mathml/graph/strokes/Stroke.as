@@ -55,6 +55,10 @@ public class Stroke{
 				pannel.graphics.lineStyle(style.thin, style.color, 0.15);
 				pannel.graphics.moveTo(points[1].x, points[1].y);
 				pannel.graphics.lineTo(points[2].x, points[2].y);
+			}else if(points[0]==2){
+				// draw circle grid polar coordinates style
+				pannel.graphics.lineStyle(style.thin, style.color, 0.20);
+				pannel.graphics.drawCircle(points[1].x, points[1].y, points[2]);
 			}
 			
 		}

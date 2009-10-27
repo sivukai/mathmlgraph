@@ -12,7 +12,6 @@ public class OperatorType{
 	public static const MULTIPLICATION:OperatorType = new OperatorType("x");
 	public static const DIVISION:OperatorType = new OperatorType("/");
 
-
 	public var value:String;
 	
 	public function OperatorType(_value:String):void{

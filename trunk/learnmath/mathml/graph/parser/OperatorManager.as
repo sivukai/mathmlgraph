@@ -5,11 +5,20 @@
 	Site: www.learn-math.info
 ---------------------------------------------------------------*/
 import flash.xml.*;
+import learnmath.mathml.graph.functions.*;
 
 public class OperatorManager{
 
 	public static function isOperator(node:XMLNode):Boolean{
-		if(node.nodeName=='mo'){
+		if(getOperator(node)!=null){
+			return true;
+		}
+		return false;		
+	}
+	public static function isFunction(node:XMLNode):Boolean{
+		if(OperatorsTable.isSin(node)){
+			return true;
+		}else if(OperatorsTable.isCos(node)){
 			return true;
 		}
 		return false;		
@@ -26,6 +35,15 @@ public class OperatorManager{
 			}else if(OperatorsTable.isMinus(node)){
 				return new Operator(OperatorType.MINUS);
 			}
+		}
+		return null;		
+	}
+	
+	public static function getFunction(node:XMLNode, child:GraphFunction):GraphFunction{
+		if(OperatorsTable.isSin(node)){
+			return new Sin(child);
+		}else if(OperatorsTable.isCos(node)){
+			return new Cos(child);
 		}
 		return null;		
 	}
